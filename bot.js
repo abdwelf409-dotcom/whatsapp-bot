@@ -1,4 +1,4 @@
-ultimate_bot_v2 = r"""const {
+const {
     default: makeWASocket,
     useMultiFileAuthState,
     DisconnectReason,
@@ -736,8 +736,3 @@ async function main() {
 main().catch(err => console.error(err));
 """
 
-with open('/mnt/agents/output/bot_ultimate_v2.js', 'w', encoding='utf-8') as f:
-    f.write(ultimate_bot_v2)
-
-print
-p
