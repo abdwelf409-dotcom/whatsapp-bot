@@ -1,0 +1,18 @@
+{
+  "name": "ultimate-whatsapp-bot",
+  "version": "2.0.0",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.7.13",
+    "fs-extra": "^11.2.0",
+    "pino": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
+
