@@ -1,4 +1,6 @@
-const {
+# Let's create the modified code with immediate pairing code generation
+
+modified_code = '''const {
     default: makeWASocket,
     useMultiFileAuthState,
     DisconnectReason,
@@ -91,7 +93,7 @@ if (!fs.existsSync(configPath)) {
         monitoringEnabled: true,
         adsEnabled: true,
         autoReplyEnabled: false,
-        autoReplyText: "*مرحباً بك!*\n\nتواصل معنا مباشرة عبر الواتساب لتلبية طلبك بسرعة وسهولة 📥:\nhttps://wa.me/967734691582",
+        autoReplyText: "*مرحباً بك!*\\n\\nتواصل معنا مباشرة عبر الواتساب لتلبية طلبك بسرعة وسهولة 📥:\\nhttps://wa.me/967734691582",
         keywords: defaultKeywords,
         ownerNumbers: ["967734691582", "967739172238", "966593341070"],
         smartFilter: true,
@@ -127,7 +129,7 @@ function smartDetect(text) {
     if (!text || typeof text !== 'string') return false;
     if (text.length > 150) return false;
 
-    const urlPattern = /https?:\/\/\S+|www\.\S+|chat\.whatsapp\.com\/\S+/i;
+    const urlPattern = /https?:\\/\\/\\S+|www\\.\\S+|chat\\.whatsapp\\.com\\/\\S+/i;
     if (urlPattern.test(text)) return false;
 
     const lowerText = text.toLowerCase().trim();
@@ -144,11 +146,11 @@ function smartDetect(text) {
     if (!config.smartFilter) return false;
 
     const patterns = [
-        /(أبي|ابغي|ابغى|محتاج|محتاجه|محتاجة|بغيت|اريد)\s+.+\s+(يسوي|يصمم|يخلص|يحل|يكتب|يمنتج|يساعد|يفهم)/,
-        /(من\s+يسوي|من\s+يعرف|مين\s+يسوي|مين\s+يعرف|حد\s+يعرف|أحد\s+يعرف|تعرفون)\s+/,
-        /(حد\s+عنده|أحد\s+عنده)\s+/,
-        /(خدمات\s+(طلابية|جامعية)|بحوث|مشاريع|واجبات|تقارير|تكاليف)/,
-        /(يسوي\s+لي|يساعدني|ساعدوني|يسوي\s+لنا)/
+        /(أبي|ابغي|ابغى|محتاج|محتاجه|محتاجة|بغيت|اريد)\\s+.+\\s+(يسوي|يصمم|يخلص|يحل|يكتب|يمنتج|يساعد|يفهم)/,
+        /(من\\s+يسوي|من\\s+يعرف|مين\\s+يسوي|مين\\s+يعرف|حد\\s+يعرف|أحد\\s+يعرف|تعرفون)\\s+/,
+        /(حد\\s+عنده|أحد\\s+عنده)\\s+/,
+        /(خدمات\\s+(طلابية|جامعية)|بحوث|مشاريع|واجبات|تقارير|تكاليف)/,
+        /(يسوي\\s+لي|يساعدني|ساعدوني|يسوي\\s+لنا)/
     ];
 
     return patterns.some(pattern => pattern.test(lowerText));
@@ -166,16 +168,16 @@ async function getGroupName(sock, jid) {
 
 // ==================== تنسيق التنبيه بنفس شكل الصورة ====================
 function formatAlert(groupName, pushName, senderNumber, senderMention, phone, messageContent) {
-    return `*تنبيه طلب جديد* 📢\n\n` +
-           `*المجموعة:* 👥\n` +
-           `${groupName}\n\n` +
-           `*الاسم:* 👤\n` +
-           `${senderMention}\n\n` +
-           `*صاحب الرسالة:* 👤\n` +
-           `${senderMention}\n\n` +
-           `*عبر حساب:* 🤖\n` +
-           `${phone}\n\n` +
-           `*الرسالة:* 📝\n` +
+    return `*تنبيه طلب جديد* 📢\\n\\n` +
+           `*المجموعة:* 👥\\n` +
+           `${groupName}\\n\\n` +
+           `*الاسم:* 👤\\n` +
+           `${senderMention}\\n\\n` +
+           `*صاحب الرسالة:* 👤\\n` +
+           `${senderMention}\\n\\n` +
+           `*عبر حساب:* 🤖\\n` +
+           `${phone}\\n\\n` +
+           `*الرسالة:* 📝\\n` +
            `${messageContent}`;
 }
 
@@ -199,22 +201,22 @@ async function startAccount(phone) {
 
     socks.set(phone, sock);
 
-    // توليد كود الربط
+    // توليد كود الربط فوراً بدون تأخير
     if (!sock.authState.creds.registered) {
-        console.log(`\n[INFO] جاري توليد كود الربط للرقم: ${phone}`);
-        setTimeout(async () => {
-            try {
-                let code = await sock.requestPairingCode(phone);
-                console.log(`\n========================================\nالرقم: ${phone}\nكود الربط: ${code}\n========================================\n`);
+        console.log(`\\n[INFO] جاري توليد كود الربط للرقم: ${phone}`);
+        try {
+            let code = await sock.requestPairingCode(phone);
+            console.log(`\\n========================================\\nالرقم: ${phone}\\nكود الربط: ${code}\\n========================================\\n`);
 
-                for (const [p, s] of socks.entries()) {
-                    if (s.authState.creds.registered && p !== phone && config.targetGroup) {
-                        await s.sendMessage(config.targetGroup, { text: `🔑 كود الربط للرقم ${phone} هو: *${code}*` });
-                        break;
-                    }
+            for (const [p, s] of socks.entries()) {
+                if (s.authState.creds.registered && p !== phone && config.targetGroup) {
+                    await s.sendMessage(config.targetGroup, { text: `🔑 كود الربط للرقم ${phone} هو: *${code}*` });
+                    break;
                 }
-            } catch (err) { console.error(`[ERROR] فشل توليد الكود:`, err.message); }
-        }, 5000);
+            }
+        } catch (err) { 
+            console.error(`[ERROR] فشل توليد الكود:`, err.message); 
+        }
     }
 
     sock.ev.on('creds.update', saveCreds);
@@ -299,7 +301,7 @@ async function startAccount(phone) {
 
                 // ─── ربط رقم جديد ───
                 if (messageContent.startsWith('ربط ')) {
-                    const newPhone = messageContent.replace('ربط', '').replace(/\+/g, '').replace(/\s/g, '').trim();
+                    const newPhone = messageContent.replace('ربط', '').replace(/\\+/g, '').replace(/\\s/g, '').trim();
                     if (newPhone.length > 8) {
                         await sock.sendMessage(jid, { text: `⏳ جاري بدء الربط للرقم ${newPhone}...` });
                         startAccount(newPhone);
@@ -313,7 +315,7 @@ async function startAccount(phone) {
                     if (!adText) continue;
 
                     isAdvertisingActive = true;
-                    await sock.sendMessage(jid, { text: `🚀 جاري نشر الإعلان من كافة الحسابات...\n*(لإيقافه أرسل: ايقاف الاعلانات)*` });
+                    await sock.sendMessage(jid, { text: `🚀 جاري نشر الإعلان من كافة الحسابات...\\n*(لإيقافه أرسل: ايقاف الاعلانات)*` });
 
                     for (const [p, s] of socks.entries()) {
                         if (!isAdvertisingActive) break;
@@ -345,10 +347,10 @@ async function startAccount(phone) {
                 if (messageContent.startsWith('اعلان-حساب ')) {
                     const parts = messageContent.replace('اعلان-حساب ', '').trim().split(' ');
                     if (parts.length < 2) {
-                        await sock.sendMessage(jid, { text: `⚠️ الاستخدام الصحيح:\nاعلان-حساب [رقم_الحساب] [نص الإعلان]` });
+                        await sock.sendMessage(jid, { text: `⚠️ الاستخدام الصحيح:\\nاعلان-حساب [رقم_الحساب] [نص الإعلان]` });
                         continue;
                     }
-                    const targetPhone = parts[0].replace(/\+/g, '').replace(/\s/g, '').trim();
+                    const targetPhone = parts[0].replace(/\\+/g, '').replace(/\\s/g, '').trim();
                     const adText = parts.slice(1).join(' ');
 
                     const specificSock = socks.get(targetPhone);
@@ -358,7 +360,7 @@ async function startAccount(phone) {
                     }
 
                     isAdvertisingActive = true;
-                    await sock.sendMessage(jid, { text: `🚀 جاري نشر الإعلان من الحساب (${targetPhone}) في جميع المجموعات...\n*(لإيقافه أرسل: ايقاف الاعلانات)*` });
+                    await sock.sendMessage(jid, { text: `🚀 جاري نشر الإعلان من الحساب (${targetPhone}) في جميع المجموعات...\\n*(لإيقافه أرسل: ايقاف الاعلانات)*` });
 
                     try {
                         const groups = await specificSock.groupFetchAllParticipating();
@@ -387,7 +389,7 @@ async function startAccount(phone) {
                 if (messageContent.startsWith('اعلان-مجموعة-حساب ')) {
                     const parts = messageContent.replace('اعلان-مجموعة-حساب ', '').trim().split(' ');
                     if (parts.length < 3) {
-                        await sock.sendMessage(jid, { text: `⚠️ الاستخدام الصحيح:\nاعلان-مجموعة-حساب [الرقم] [اسم_المجموعة] [النص]` });
+                        await sock.sendMessage(jid, { text: `⚠️ الاستخدام الصحيح:\\nاعلان-مجموعة-حساب [الرقم] [اسم_المجموعة] [النص]` });
                         continue;
                     }
                     const targetPhone = parts[0];
@@ -494,7 +496,7 @@ async function startAccount(phone) {
                         if (!config.keywords.includes(newKw)) {
                             config.keywords.push(newKw);
                             saveConfig();
-                            await sock.sendMessage(jid, { text: `✅ تمت إضافة الكلمة بنجاح:\n"${newKw}"` });
+                            await sock.sendMessage(jid, { text: `✅ تمت إضافة الكلمة بنجاح:\\n"${newKw}"` });
                         } else {
                             await sock.sendMessage(jid, { text: `⚠️ الكلمة موجودة مسبقاً.` });
                         }
@@ -538,9 +540,9 @@ async function startAccount(phone) {
                         let list = '';
                         for (let i = 0; i < groupsConfig.targetGroups.length; i++) {
                             const name = await getGroupName(sock, groupsConfig.targetGroups[i]);
-                            list += `${i + 1}. ${name}\n`;
+                            list += `${i + 1}. ${name}\\n`;
                         }
-                        await sock.sendMessage(jid, { text: `📋 *مجموعات النشر المستهدفة:*\n\n${list}` });
+                        await sock.sendMessage(jid, { text: `📋 *مجموعات النشر المستهدفة:*\\n\\n${list}` });
                     }
                     continue;
                 }
@@ -565,9 +567,9 @@ async function startAccount(phone) {
                         let list = '';
                         for (let i = 0; i < groupsConfig.excludedGroups.length; i++) {
                             const name = await getGroupName(sock, groupsConfig.excludedGroups[i]);
-                            list += `${i + 1}. ${name}\n`;
+                            list += `${i + 1}. ${name}\\n`;
                         }
-                        await sock.sendMessage(jid, { text: `🚫 *المجموعات المستبعدة:*\n\n${list}` });
+                        await sock.sendMessage(jid, { text: `🚫 *المجموعات المستبعدة:*\\n\\n${list}` });
                     }
                     continue;
                 }
@@ -592,17 +594,17 @@ async function startAccount(phone) {
                         let list = '';
                         for (let i = 0; i < groupsConfig.monitoredGroups.length; i++) {
                             const name = await getGroupName(sock, groupsConfig.monitoredGroups[i]);
-                            list += `${i + 1}. ${name}\n`;
+                            list += `${i + 1}. ${name}\\n`;
                         }
-                        await sock.sendMessage(jid, { text: `👁️ *مجموعات المراقبة:*\n\n${list}` });
+                        await sock.sendMessage(jid, { text: `👁️ *مجموعات المراقبة:*\\n\\n${list}` });
                     }
                     continue;
                 }
 
                 // ─── أوامر المعلومات ───
                 if (messageContent === 'الحسابات') {
-                    const list = activeSessions.length > 0 ? activeSessions.map(p => `- ${p}`).join('\n') : 'لا توجد حسابات.';
-                    await sock.sendMessage(jid, { text: `📱 *الحسابات المرتبطة:*\n\n${list}` });
+                    const list = activeSessions.length > 0 ? activeSessions.map(p => `- ${p}`).join('\\n') : 'لا توجد حسابات.';
+                    await sock.sendMessage(jid, { text: `📱 *الحسابات المرتبطة:*\\n\\n${list}` });
                     continue;
                 }
 
@@ -616,16 +618,16 @@ async function startAccount(phone) {
 
                 // ─── حالة البوت ───
                 if (messageContent === 'حالة') {
-                    const status = `⚙️ *حالة البوت:*\n\n` +
-                        `🔍 المراقبة: ${config.monitoringEnabled ? '✅ شغالة' : '❌ متوقفة'}\n` +
-                        `📢 الإعلانات: ${config.adsEnabled ? '✅ مفعلة' : '❌ متوقفة'}\n` +
-                        `🧠 الفلترة الذكية: ${config.smartFilter ? '✅ شغالة' : '❌ متوقفة'}\n` +
-                        `🤖 الرد التلقائي: ${config.autoReplyEnabled ? '✅ مفعل' : '❌ متوقف'}\n` +
-                        `📱 الحسابات: ${activeSessions.length}\n` +
-                        `📝 الكلمات: ${config.keywords.length}\n` +
-                        `📋 جروبات النشر: ${groupsConfig.targetGroups.length || 'الكل'}\n` +
-                        `🚫 جروبات مستبعدة: ${groupsConfig.excludedGroups.length}\n` +
-                        `👁️ جروبات المراقبة: ${groupsConfig.monitoredGroups.length || 'الكل'}\n` +
+                    const status = `⚙️ *حالة البوت:*\\n\\n` +
+                        `🔍 المراقبة: ${config.monitoringEnabled ? '✅ شغالة' : '❌ متوقفة'}\\n` +
+                        `📢 الإعلانات: ${config.adsEnabled ? '✅ مفعلة' : '❌ متوقفة'}\\n` +
+                        `🧠 الفلترة الذكية: ${config.smartFilter ? '✅ شغالة' : '❌ متوقفة'}\\n` +
+                        `🤖 الرد التلقائي: ${config.autoReplyEnabled ? '✅ مفعل' : '❌ متوقف'}\\n` +
+                        `📱 الحسابات: ${activeSessions.length}\\n` +
+                        `📝 الكلمات: ${config.keywords.length}\\n` +
+                        `📋 جروبات النشر: ${groupsConfig.targetGroups.length || 'الكل'}\\n` +
+                        `🚫 جروبات مستبعدة: ${groupsConfig.excludedGroups.length}\\n` +
+                        `👁️ جروبات المراقبة: ${groupsConfig.monitoredGroups.length || 'الكل'}\\n` +
                         `👥 جروب التنبيهات: ${config.targetGroup ? '✅ محدد' : '❌ غير محدد'}`;
                     await sock.sendMessage(jid, { text: status });
                     continue;
@@ -633,38 +635,38 @@ async function startAccount(phone) {
 
                 // ─── مساعدة ───
                 if (messageContent === 'مساعدة' || messageContent === 'اوامر' || messageContent === 'الاوامر') {
-                    const helpText = `📖 *أوامر البوت:*\n\n` +
-                        `*🔗 الحسابات:*\n` +
-                        `• ربط [رقم] - ربط حساب جديد\n` +
-                        `• الحسابات - عرض الحسابات المتصلة\n\n` +
-                        `*📢 الإعلانات:*\n` +
-                        `• اعلان [نص] - نشر من كل الحسابات\n` +
-                        `• اعلان-حساب [رقم] [نص] - نشر من حساب محدد\n` +
-                        `• اعلان-مجموعة-حساب [رقم] [اسم] [نص] - نشر في جروب معين\n` +
-                        `• ايقاف الاعلانات - إيقاف فوري للإعلانات\n` +
-                        `• تشغيل اعلانات / ايقاف اعلانات\n\n` +
-                        `*📋 المجموعات:*\n` +
-                        `• جروب التنبيهات - تعيين جروب التنبيهات\n` +
-                        `• اضف جروب نشر - إضافة للنشر المستهدف\n` +
-                        `• احذف جروب نشر - حذف من النشر\n` +
-                        `• جروبات النشر - عرض المستهدفة\n` +
-                        `• استبعد جروب - استبعاد من النشر\n` +
-                        `• الغي استبعاد جروب - إلغاء الاستبعاد\n` +
-                        `• جروبات مستبعدة - عرض المستبعدة\n` +
-                        `• اضف جروب مراقبة - مراقبة مجموعة محددة\n` +
-                        `• احذف جروب مراقبة - إيقاف المراقبة\n` +
-                        `• جروبات المراقبة - عرض مجموعات المراقبة\n\n` +
-                        `*👁️ المراقبة:*\n` +
-                        `• تشغيل مراقبة / ايقاف مراقبة\n` +
-                        `• تشغيل فلترة ذكية / ايقاف فلترة ذكية\n` +
-                        `• اضف كلمة [كلمة] - إضافة كلمة\n` +
-                        `• حذف كلمة [كلمة] - حذف كلمة\n` +
-                        `• عرض الكلمات - عدد الكلمات\n\n` +
-                        `*🤖 الرد التلقائي:*\n` +
-                        `• تشغيل رد تلقائي / ايقاف رد تلقائي\n` +
-                        `• تعيين رسالة الرد [نص] - تغيير الرسالة\n\n` +
-                        `*⚙️ عام:*\n` +
-                        `• حالة - عرض حالة البوت\n` +
+                    const helpText = `📖 *أوامر البوت:*\\n\\n` +
+                        `*🔗 الحسابات:*\\n` +
+                        `• ربط [رقم] - ربط حساب جديد\\n` +
+                        `• الحسابات - عرض الحسابات المتصلة\\n\\n` +
+                        `*📢 الإعلانات:*\\n` +
+                        `• اعلان [نص] - نشر من كل الحسابات\\n` +
+                        `• اعلان-حساب [رقم] [نص] - نشر من حساب محدد\\n` +
+                        `• اعلان-مجموعة-حساب [رقم] [اسم] [نص] - نشر في جروب معين\\n` +
+                        `• ايقاف الاعلانات - إيقاف فوري للإعلانات\\n` +
+                        `• تشغيل اعلانات / ايقاف اعلانات\\n\\n` +
+                        `*📋 المجموعات:*\\n` +
+                        `• جروب التنبيهات - تعيين جروب التنبيهات\\n` +
+                        `• اضف جروب نشر - إضافة للنشر المستهدف\\n` +
+                        `• احذف جروب نشر - حذف من النشر\\n` +
+                        `• جروبات النشر - عرض المستهدفة\\n` +
+                        `• استبعد جروب - استبعاد من النشر\\n` +
+                        `• الغي استبعاد جروب - إلغاء الاستبعاد\\n` +
+                        `• جروبات مستبعدة - عرض المستبعدة\\n` +
+                        `• اضف جروب مراقبة - مراقبة مجموعة محددة\\n` +
+                        `• احذف جروب مراقبة - إيقاف المراقبة\\n` +
+                        `• جروبات المراقبة - عرض مجموعات المراقبة\\n\\n` +
+                        `*👁️ المراقبة:*\\n` +
+                        `• تشغيل مراقبة / ايقاف مراقبة\\n` +
+                        `• تشغيل فلترة ذكية / ايقاف فلترة ذكية\\n` +
+                        `• اضف كلمة [كلمة] - إضافة كلمة\\n` +
+                        `• حذف كلمة [كلمة] - حذف كلمة\\n` +
+                        `• عرض الكلمات - عدد الكلمات\\n\\n` +
+                        `*🤖 الرد التلقائي:*\\n` +
+                        `• تشغيل رد تلقائي / ايقاف رد تلقائي\\n` +
+                        `• تعيين رسالة الرد [نص] - تغيير الرسالة\\n\\n` +
+                        `*⚙️ عام:*\\n` +
+                        `• حالة - عرض حالة البوت\\n` +
                         `• مساعدة - عرض هذه القائمة`;
                     await sock.sendMessage(jid, { text: helpText });
                     continue;
@@ -721,7 +723,7 @@ async function startAccount(phone) {
 // ==================== الدالة الرئيسية ====================
 async function main() {
     console.log("[SYSTEM] Starting Ultimate Multi-Account Bot...");
-    const defaultNumbers = ["967739172238", "966593341070"];
+    const defaultNumbers = ["967739172238"];
     for (const num of defaultNumbers) {
         if (!activeSessions.includes(num)) activeSessions.push(num);
     }
@@ -734,5 +736,13 @@ async function main() {
 }
 
 main().catch(err => console.error(err));
+'''
 
+# Save to file
+with open('/mnt/agents/output/bot_modified.js', 'w', encoding='utf-8') as f:
+    f.write(modified_code)
 
+print("File saved successfully!")
+print("\n=== التعديل الرئيسي ===")
+print("تم إزالة setTimeout(5000) من توليد كود الربط")
+print("الكود الآن يُولد فوراً بدون أي تأخير")
